@@ -1,0 +1,356 @@
+{# BASE LOAD #}
+{% extends 'base.html.twig' %}
+
+{# TITLE TOP PAGE #}
+{% block title %}Epitech
+{% endblock %}
+
+{% block stylesheet %}{% endblock %}
+
+{# BODY HOME PAGE #}
+{% block body %}
+
+
+	{# ========================== #}
+	{# ========== CMS =========== #}
+	{# ========================== #}
+
+	{% set nbSections = 0 %}
+
+		{% for section in sections %}
+		{# Start Sections #}
+
+		{% set nbSections = nbSections + 1 %}
+			<section id="{% if nbSections == 1 %}firstSection{% else %}otherSection{% endif %}" style="background-color: {{section.color}}; {% if nbSections == 1 %}{% endif %} order: {{section.ordre}};"> {% set nbline = 0 %}
+
+			{% for res in section.line %}
+				{# Start Lines #}
+				{% set nbline = nbline + 1 %}
+				<div class="container" {% if section.picture %} style="background-image: url('{{ asset('uploads/' ~ section.picture) }}');" {% endif %}>
+					<div
+						class="row">
+
+						{# BUTTON DELETE LINES #}
+						{% if section.line|length > 1 %}
+							{% if app.user %}
+								<div style="position:absolute;z-index:20">
+									<a href="{{path('app_deleteLine',{'id':res.id,'page':page.id} )}}" onclick="return confirm('Are you sure you want to delete the line?')">
+										<div class="d-flex justify-content-end">
+											<div class="d-flex justify-content-center align-items-center cubeIcon2">
+												<i class="fa-solid fa-trash"></i>
+											</div>
+										</div>
+									</a>
+								</div>
+							{% endif %}
+						{% endif %}
+						{# END BUTTON DELETE LINES #}
+
+
+						{% for res2 in res.blocks %}
+							{# Start Block #}
+							<div
+								id="bloc{{res2.id}}" class="
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	                            {% if res2.type == 2 %} col-2 {% endif %}
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	                            {% if res2.type == 3 %} col-3 {% endif %}
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	                            {% if res2.type == 4 %} col-4 {% endif %}
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	                            {% if res2.type == 6 %} col-6 {% endif %}
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	                            {% if res2.type == 8 %} col-8 {% endif %}
+																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																																	                            {% if res2.type == 12 %} col-12 {% endif %} ; blockCMS" style="order: {{res2.ordre}}">
+
+								{# BOUTON ADD CONTENTS #}
+								{% if res2.contents is  empty %}
+									{% if app.user %}
+										<div class="d-flex justify-content-center align-items-end">
+											<button type="button" class="btnCMS btnAddContents mt-3" data-bs-toggle="modal" data-bs-target="#addContents{{res2.id}}">
+												<i class="fa-solid fa-cubes"></i>
+												Add Contents
+											</button>
+										</div>
+									{% endif %}
+								{% endif %}
+								{# END BOUTON ADD CONTENTS #}
+
+								{# MODAL ADD CONTENT #}
+
+								<div class="modal fade" id="addContents{{res2.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content d-block mx-auto">
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="position: absolute; top: 0; left: 0; margin-top: 1rem; margin-left: 1rem;"></button>
+											<div class="container-modal d-flex flex-column d-block mx_auto">
+												<h2 class="text-center">Ajouter un contenu</h2>
+												<p class="text-center">Les «block» peuvent contenir chacun un «Contenu» dédiés à du texte, une image, un lien youtube, …</p>
+											</div>
+
+											<div class="container-contenu d-flex flex-wrap  justify-content-around">
+												<a href="{{path('app_addContent',{'block':res2.id,'type':'text'})}}">
+													<div class="container-picto container-picto-texte">
+														<div class="simu-grid-picto d-flex justify-content-center align-items-center">
+															<img src="{{asset('img/cms/cpi-textes.svg')}}" alt="">
+														</div>
+														<p class="colonneText text-center">Texte</p>
+													</div>
+												</a>
+
+												<a href="{{path('app_addContent',{'block':res2.id,'type':'picture'})}}">
+													<div class="container-picto container-picto-texte">
+														<div class="simu-grid-picto d-flex justify-content-center align-items-center">
+															<img src="{{asset('img/cms/cpi-images.svg')}}" alt="">
+														</div>
+														<p class="colonneText text-center">Image</p>
+													</div>
+												</a>
+											</div>
+
+											<div class="modal-submit d-flex justify-content-end align-items-end">
+												<button type="submit" class=" btnAdd btnAdd2">Ajouter</button>
+											</div>
+										</div>
+									</div>
+								</div>
+								{# END MODAL ADD CONTENT #}
+
+
+								{% if res2.contents is not empty %}
+									{# Start Contents #}
+
+									{# Iterate over each content in res2.contents #}
+										{% for content in res2.contents %}
+										{# == TEXTE == #}
+											{% if content.type == 'text' %}
+											{{ content.titre | raw }}
+										{{ content.text | raw }}
+										{% endif %}
+										{# == IMAGE == #}
+											{% if content.type == 'picture' %}
+											{{ content.titre | raw }}
+										<img class="img-fluid" src="{{ asset('uploads/' ~ content.picture) }}" alt=""> {% endif %}
+									{% endfor %}
+
+									{# Editing and deleting links for the first content as an example (adjust as needed) #}
+									{% if app.user and res2.contents|length > 0 %}
+										<div class="d-flex justify-content-center mb-3">
+											<a href="{{ path('app_editContent', {'id': res2.contents.first.id, 'type': res2.contents.first.type}) }}">
+												<div class="d-flex justify-content-center align-items-center cubeIcon">
+													<i class="fa-solid fa-pen"></i>
+												</div>
+											</a>
+											<a href="{{ path('app_deleteContent', {'id': res2.contents.first.id}) }}" onclick="return confirm('Êtes-vous sûr ?')">
+												<div class="d-flex justify-content-center align-items-center cubeIcon2">
+													<i class="fa-solid fa-trash"></i>
+												</div>
+											</a>
+										</div>
+									{% endif %}
+								{% endif %}
+								{# End Contents #}
+							</div>
+						{% endfor %}
+						{# End Block #}
+					</div>
+
+					{# MODAL ADD BLOCk #}
+					<div class="modal fade" id="addBlock{{res.id}}" tabindex="-1" role="dialog" aria-labelledby="addBlockTitle" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-body">
+									<button type="button" class="close-" data-bs-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+
+									<div class="container-modal d-flex flex-column">
+										<h2>Add block</h2>
+									</div>
+
+									<div class="container-grid-choix d-flex flex-wrap justify-content-around ">
+										<a href="{{path('app_addBlock',{'line':res.id,'type':12})}}">
+											<div class="container-choix">
+												<div class="simu-grid d-flex justify-content-center align-items-center">
+													<div class="simu-col simu-col-12 d-flex justify-content-center align-items-center">
+														<p>12</p>
+													</div>
+												</div>
+												<p class="colonneText text-center">1 column</p>
+											</div>
+										</a>
+										<a href="{{path('app_addBlock',{'line':res.id,'type':66})}}">
+											<div class="container-choix">
+												<div class="simu-grid d-flex justify-content-around align-items-center">
+													<div class="simu-col simu-col-6 d-flex justify-content-center align-items-center">
+														<p>6</p>
+													</div>
+													<div class="simu-col simu-col-6 d-flex justify-content-center align-items-center">
+														<p>6</p>
+													</div>
+												</div>
+												<p class="colonneText text-center">2 column</p>
+											</div>
+										</a>
+
+										<a href="{{path('app_addBlock',{'line':res.id,'type':444})}}">
+											<div class="container-choix">
+												<div class="simu-grid d-flex justify-content-around align-items-center">
+													<div class="simu-col simu-col-4 d-flex justify-content-center align-items-center">
+														<p>4</p>
+													</div>
+													<div class="simu-col simu-col-4 d-flex justify-content-center align-items-center">
+														<p>4</p>
+													</div>
+													<div class="simu-col simu-col-4 d-flex justify-content-center align-items-center">
+														<p>4</p>
+													</div>
+												</div>
+												<p class="colonneText text-center">3 column</p>
+											</div>
+										</a>
+
+										<a href="{{path('app_addBlock',{'line':res.id,'type':84})}}">
+											<div class="container-choix">
+												<div class="simu-grid d-flex justify-content-around align-items-center">
+													<div class="simu-col simu-col-8 d-flex justify-content-center align-items-center">
+														<p>8</p>
+													</div>
+													<div class="simu-col simu-col-4 d-flex justify-content-center align-items-center">
+														<p>4</p>
+													</div>
+												</div>
+												<p class="colonneText text-center">2 column</p>
+											</div>
+										</a>
+
+										<a href="{{path('app_addBlock',{'line':res.id,'type':48})}}">
+											<div class="container-choix">
+												<div class="simu-grid d-flex justify-content-around align-items-center">
+													<div class="simu-col simu-col-4 d-flex justify-content-center align-items-center">
+														<p>4</p>
+													</div>
+													<div class="simu-col simu-col-8 d-flex justify-content-center align-items-center">
+														<p>8</p>
+													</div>
+												</div>
+												<p class="colonneText text-center">2 column</p>
+											</div>
+										</a>
+
+										<a href="{{path('app_addBlock',{'line':res.id,'type':3333})}}">
+											<div class="container-choix">
+												<div class="simu-grid d-flex justify-content-around align-items-center">
+													<div class="simu-col simu-col-3 d-flex justify-content-center align-items-center">
+														<p>3</p>
+													</div>
+													<div class="simu-col simu-col-3 d-flex justify-content-center align-items-center">
+														<p>3</p>
+													</div>
+													<div class="simu-col simu-col-3 d-flex justify-content-center align-items-center">
+														<p>3</p>
+													</div>
+													<div class="simu-col simu-col-3 d-flex justify-content-center align-items-center">
+														<p>3</p>
+													</div>
+												</div>
+												<p class="colonneText text-center">4 column</p>
+											</div>
+										</a>
+									</div>
+
+									<div class="modal-submit d-flex justify-content-end align-items-end">
+										<button type="submit" class=" btnAdd btnAdd2">Ajouter</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					{# END MODAL ADD BLOCk #}
+				</div>
+
+				{# BOUTON ADD BLOCk #}
+				{% if nbline == section.line|length %}
+					{% if app.user %}
+						<div class="container">
+							<div class="line d-flex justify-content-center">
+								<button type="button" class="btnCMS btnAddBlocks mt-3" data-bs-toggle="modal" data-bs-target="#addBlock{{res.id}}" data-res-id="{{res.id}}">
+									<i class="fa-regular fa-square-plus"></i>
+									Add block
+								</button>
+							</div>
+						</div>
+					{% endif %}
+				{% endif %}
+				{# END BOUTON ADD BLOCk #}
+
+			{% endfor %}
+			{# End Lines #}
+		</section>
+		{# BOUTON DELETE/EDIT SECTIONS #}
+		{% if app.user %}
+			<div class="d-flex justify-content-center">
+				{% if section.ordre == maxOrdre %}
+
+					{% else %}
+						<a href="{{ path('app_updateOrdreSectionDown', {'id': section.id, 'page': page.id}) }}" style="color:black; text-decoration: none;">
+							<div class="d-flex justify-content-center align-items-center btnCMS  btnEditSection btnEditSection1" style="width:200px">
+								<i class="fa-solid fa-arrow-down" style="padding-right:10px"></i>
+								Move down
+							</div>
+						</a>
+				{% endif %}
+				<a href="{{path('app_updateSection',{'id':section.id,'page':page.id})}}" style="color:black; text-decoration:none">
+					<div class="d-flex justify-content-center align-items-center btnCMS btnEditSection" style="width:200px; text-decoration: none">
+						<i class="fa-solid fa-pen" style="padding-right:10px"></i>
+						Edit section
+					</div>
+				</a>
+				<a href="{{path('app_deleteSection',{'id':section.id,'page':page.id})}}" onclick="return confirm('Are you sure you want to delete the section ?')" style="color:white; text-decoration:none">
+					<div class="d-flex justify-content-center align-items-center btnCMS btnDeleteSection" style="color:black;width:200px">
+						<i class="fa-solid fa-trash" style="padding-right:10px"></i>
+						Delete section
+					</div>
+				</a>
+				{% if section.ordre == 1 %}
+					{% else %}
+						<a href="{{path('app_updateOrdreSectionUp',{'id':section.id,'page':page.id})}}" style="color:black; text-decoration: none;">
+							<div class="d-flex justify-content-center align-items-center btnCMS   btnEditSection btnEditSection1" style="width:200px; text-decoration: none ">
+								<i class="fa-solid fa-arrow-up" style="padding-right:10px"></i>
+								Move up
+							</div>
+						</a>
+				{% endif %}
+
+			</div>
+			{# END BOUTON DELETE/EDIT SECTIONS #}
+		{% endif %}
+	{% endfor %}{# End Sections #}{# BOUTON ADD SECTIONS #}{% if app.user %}
+		<a data-toggle="modal" data-target="#addSection">
+			<div class="addSectionContainer d-flex align-items-center justify-content-center">
+				<i class="fa-solid fa-circle-plus"></i>
+			</div>
+		</a>
+	{% endif %}{# END BOUTON ADD SECTIONS #}{# MODAL ADD SECTION #}<div class="modal fade" id="addSection" tabindex="-1" role="dialog" aria-labelledby="addSectionTitle" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content  d-block mx-auto">
+				<button type="button" class="close-btn" data-bs-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<form action="{{path('app_addSection')}}" method="post" enctype="multipart/form-data">
+					<input type="hidden" name="page" value="{{page.id}}">
+					<div class="container-contenus-modal">
+						<h3 class="text-center">Order</h3>
+						<input type="number" name="ordreSection" id="ordreSection" value="{{ordreMax}}">
+					</div>
+					<div class="container-contenus-modal">
+						<h3 class="text-center">Section background color</h3>
+						<input type="color" name="couleurSection" id="couleurSection" value="#fff">
+					</div>
+					{# <div class="container-contenus-modal">
+																<h3 class="text-center">Section background picture</h3>
+																<input type="file" name="pictureSection" id="pictureSection">
+															</div> #}
+					<div class="modal-submit d-flex justify-content-center">
+						<button type="submit" class="btnAdd">Add</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}{# ============================== #}{# ========== FIN CMS =========== #}
+{# ============================== #}

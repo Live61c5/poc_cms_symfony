@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier section n°
+{% endblock %}
+
+{% block body %}
+	<div class="container pb-5 mb-5">
+		<div class="row">
+			<div class="col-12">
+				<h2>Edit - Section n° | Page
+				</h2>
+			</div>
+
+			{{ form_start(form, {'action': path('app_updateSection', {'id': section.id, 'page': page.id})}) }}
+
+			<div class="col-12">
+				<h3>Background color</h3>
+				{{ form_row(form.color, { 'attr': {'class': 'form-control','placeholder': 'Background Color'} }) }}
+			</div>
+
+			<div class="col-12">
+				<h3>Edit picture</h3>
+				{{ form_row(form.picture, { 'attr': {'class': 'form-control'} }) }}
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 mt-2 d-flex justify-content-center">
+				<div class="modal-submit d-flex justify-content-center">
+					<button type="submit" class=" btnAdd">Enregistrer</button>
+				</div>
+			</div>
+
+			{{form_end(form)}}
+
+		</div>
+	</div>
+{% endblock %}

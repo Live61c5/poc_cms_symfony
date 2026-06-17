@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add Contents
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				{% if type == 'text'  %}
+					<h2>Create text</h2>
+					<p>You can leave a field empty, but it will not be displayed on the page.</p>
+
+					{{form_start(form)}}
+					<input type="hidden" name="redirection" value="{{referer}}">
+					<div class="">
+						<h3>Titre</h3>
+						{{ form_row(form.titre, { 'attr': {'class': 'form-control','placeholder': 'Text'} }) }}
+						<h3>Texte</h3>
+						{{ form_row(form.text, { 'attr': {'class': 'form-control','placeholder': 'Text'} }) }}
+					</div>
+
+					<div class="modal-submit d-flex justify-content-center">
+						<button type="submit" class="btnAdd">Add</button>
+					</div>
+					{{form_end(form)}}
+				{% endif %}
+
+				{% if type == 'picture'  %}
+					<h2>Create Picture</h2>
+
+					{{form_start(form)}}
+					<input type="hidden" name="redirection" value="{{referer}}">
+					<h3>Titre</h3>
+					{{ form_row(form.titre, { 'attr': {'class': 'form-control','placeholder': 'Texte'} }) }}
+
+					<h3>Add Picture</h3>
+					<div class="d-flex flex-column">
+						{% if contents.picture and contents.picture != "ok" %}
+							<img src="{{asset('uploads/'~ contents.picture)}}" width="100">
+						{% else %}
+							<img style="display:none!important" src="{{asset('uploads/'~ contents.picture)}}" width="100">
+						{% endif %}
+
+
+						<div id="custom-file-upload" class="custom-upload">Choose a file...</div>
+						<!-- Vous gardez votre champ Symfony mais vous le cachez -->
+						{{ form_row(form.picture, {'attr': {'style': 'display:none;'}}) }}
+						<div id="file-name">No files selected</div>
+					</div>
+
+				</div>
+
+				<div class="modal-submit d-flex justify-content-center">
+					<button type="submit" class="btnAdd">Add</button>
+				</div>
+				{{form_end(form)}}
+			{% endif %}
+
+
+		</div>
+	</div>
+</div>
+<script>
+	CKEDITOR.replace('form_titre', {customConfig: '{{ asset("ckeditor_config.js") }}'});
+CKEDITOR.replace('form_text', {customConfig: '{{ asset("ckeditor_config.js") }}'});
+
+// Script File input
+{% if type == 'picture' %}
+document.getElementById('custom-file-upload').addEventListener('click', function () {
+document.getElementById('{{ form.picture.vars.id }}').click();
+});
+
+document.getElementById('{{ form.picture.vars.id }}').addEventListener('change', function (e) {
+var fileName = e.target.files[0] ? e.target.files[0].name : "Aucun fichier choisi";
+document.getElementById('file-name').textContent = fileName;
+});{% endif %}
+</script>{% endblock %}
